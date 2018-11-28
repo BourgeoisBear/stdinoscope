@@ -47,6 +47,10 @@ Stdinoscope can live chart its output with the following command:
 ./output | ./stdinoscope -C red,green,blue,yellow
 ```
 
+The **Pause** button suspends reading from STDIN, and allows you to scroll through previously captured samples.
+
+The **PDF** button creates a PDF of the current window contents.
+
 ## Caveats
 
 - If there is a delay between when the output is produced, and when Stdinoscope finally draws it, look out for the STDIN output buffering options in your output program.  Buffered outputs will only flush in large chunks--rather than sending the information as soon as it is produced.
