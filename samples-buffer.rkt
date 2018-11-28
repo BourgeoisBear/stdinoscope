@@ -123,29 +123,6 @@
         ))
     ))
 
-    #|
-
-(for/fold ([n-min +nan.0]
-             [n-max +nan.0])
-            ([i (in-list '(1 4 3 2))])
-    (cond
-      [(nan? i) (values n-min n-max)]
-      [else
-       (values
-        (if (nan? n-min) i (min i n-min))
-        (if (nan? n-max) i (max i n-max)))]
-      ))
-
-           (for ([val (in-list lst-tuple)])
-             (cond
-               [(not (nan? val))
-                (cond [(or (nan? min) (< val min)) (set! min val)])
-                (cond [(or (nan? max) (> val max)) (set! max val)])])
-             )))        
-        (if (nan? min) (values (->my-fl -1) (->my-fl 1)) (values min max))
-        ))
-    |#
-
 #|
 (define B (new samples-buf%))
 

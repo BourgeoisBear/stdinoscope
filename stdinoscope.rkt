@@ -10,7 +10,7 @@
 (define (APP-NAME)      "stdinoscope")
 (define (SYMBOL-STDIN)  "-")
 (define COLOR-BG (send the-color-database find-color "white"))
-(define PM-DEBUG #t)
+(define PM-DEBUG #f)
 (define TIMER-REFRESH-MSEC 100)
 
 ; CONTROL MODIFIERS
@@ -56,17 +56,9 @@ Features
   - pre-create pens  
 
 NOTES:
-   - Use `cmd` instead of power shell to preserve UTF-8 (instead of UTF-16)
+   - Use `cmd` instead of power shell in Windows to preserve UTF-8 (instead of UTF-16)
    - Output buffering of input command matters (unix util / sed options to disable)
-   - GATT_VC.exe 1 | stdinoscope.exe -S 500
-
-GATT_VC TODO:
-   - UTF-8 Encoding / No BOM
-   - Unix Line Endings
-   - Joe / Inoscope Modes
-
-./gatt.php out-100-2.txt | sed -Eu "s/^.*red=([0-9]+),\s*ir=([0-9]+).*$/\1\t\2/" > ~/inoscope
-./stdinoscope.rkt -I '-' -S 20 -C 'blue,green,gray,red'
+   - If post-processing output with `sed`, use the `-u` (unbuffered) flag to prevent output buffering
 
 |#
 
