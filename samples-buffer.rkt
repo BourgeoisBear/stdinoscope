@@ -5,10 +5,10 @@
 (define (my-nosample) +nan.f)
 
 (define (my-fl? x)
-  (single-flonum? x))
+  (double-flonum? x))
 
 (define (->my-fl x)
-  (real->single-flonum x))
+  (real->double-flonum x))
 
 (define samples-buf%
   (class object%

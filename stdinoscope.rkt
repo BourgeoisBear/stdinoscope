@@ -1,8 +1,12 @@
 #lang racket
+
 (require racket/draw)
 (require racket/gui/base)
 (require racket/cmdline)
 (require "samples-buffer.rkt")
+
+; USAGE EXAMPLE
+;		racket ./stdinoscope.rkt -C 'red,purple' -S 150 -I './red_ir'
 
 ; ------------------------------------ APP GLOBALS ------------------------------------
 
@@ -53,7 +57,7 @@ Features
   - log scale
   - Mouse-over (x, y) reporting
   - interpolate values for smooth animation?
-  - pre-create pens  
+  - pre-create pens
 
 NOTES:
    - Use `cmd` instead of power shell in Windows to preserve UTF-8 (instead of UTF-16)
@@ -430,12 +434,12 @@ samp-delta: difference between highest and lowest sample
         [(#\p) (SAVE-PDF this)]))
 
     (define ix-samples-start -1)
-    
+
     (define/public (chart-scrollbar-update . params)
       (cond
         [(null? params) ix-samples-start]
         [else
-         (let ([p-enable (car params)]) 
+         (let ([p-enable (car params)])
            (cond
              [(and (integer? p-enable) (>= p-enable 0) (not (= p-enable ix-samples-start)))
               ;(printf "S: ~a~n" p-enable)
@@ -443,7 +447,7 @@ samp-delta: difference between highest and lowest sample
               (send this refresh-now)]
              [(eq? p-enable #f)
               (send this show-scrollbars #f #f)
-              (set! ix-samples-start -1)]        
+              (set! ix-samples-start -1)]
              [(eq? p-enable #t)
               (let* ([n-hist (send SCOPE-BUFFER size?)]
                      [h-len  (max (- n-hist (PM-SAMPLES)) 0)])
@@ -456,10 +460,10 @@ samp-delta: difference between highest and lowest sample
                 )])
            )]
         ))
-    
+
     (define/override (on-scroll evt)
       (chart-scrollbar-update (send evt get-position)))
-    
+
     ; Call the superclass init, passing on all init args
     (super-new)))
 
@@ -485,7 +489,7 @@ samp-delta: difference between highest and lowest sample
                         (draw-window oCanvas oDc)
                         (DIRTY-DO (lambda () (set! SAMPLES-DIRTY 0))))]
                      )])
-    
+
     ; prime the semaphore for our usage pattern
     (semaphore-wait SEM-REDRAW)
 
@@ -554,7 +558,7 @@ samp-delta: difference between highest and lowest sample
 
     ; initialize scrollbars
     (send oCanv chart-scrollbar-update #f)
-    
+
     oCanv
     ))
 
@@ -633,7 +637,7 @@ samp-delta: difference between highest and lowest sample
                     [else
                      (send ctrl-samples set-value (number->string (PM-SAMPLES)))])
                   (send canvas-chart refresh-now #:flush? #t))
-                ])                
+                ])
              )]
           ))
 
@@ -656,7 +660,7 @@ samp-delta: difference between highest and lowest sample
        "\n\n")
       wnd-main-frame
       '(ok no-icon)
-      #:dialog-mixin unsaved-warning-mixin)       
+      #:dialog-mixin unsaved-warning-mixin)
      )
 
    ; @button: Pause
@@ -674,27 +678,27 @@ samp-delta: difference between highest and lowest sample
                 (send btn set-label "Resume")]
                [else
                 (APP-PAUSE #f)
-                (send canvas-chart chart-scrollbar-update #f)                
+                (send canvas-chart chart-scrollbar-update #f)
                 (send btn set-label "Pause")])
              )]
           ))
-   
+
    (define btn-about
      (new button%
           [label "About"]
           [horiz-margin 10]
           [parent wnd-panel-buttons]
           [callback (lambda (ctl-btn evt-btn) (dlg-about))]))
-      
+
    (define wnd-panel-chart
      (new pane%
           [parent wnd-main-frame]))
 
    (define canvas-chart (canvas-init wnd-panel-chart))
-      
+
    ; Show the frame by calling its show method
    (send wnd-main-frame show #t)
-    
+
    ; handle Ctrl-C
 #|
 ; TODO: this was blocking the repl, find a fix
@@ -703,5 +707,5 @@ samp-delta: difference between highest and lowest sample
      (void) ; to prevent echo of #t on exit
      )
 |#
-   
+
 ])
